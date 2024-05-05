@@ -1,0 +1,17 @@
+.setup-form {
+    display: flex;
+    flex-direction: column;
+    width: 300px;
+    margin: auto;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+input, select {
+    margin-bottom: 10px;
+}
+
+button {
+    padding: 5px 10px;
+    margin-top: 10px;
+}
