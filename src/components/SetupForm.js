@@ -181,44 +181,8 @@ const SetupForm = () => {
                 </div>
             ))}
 
-            {otherBlocks.map((block) => (
-                <div className="block-section" key={block}>
-                    <h4>{block}</h4>
-
-                    <select
-                        name={`blockToColors[${block}]`}
-                        value={formData.blockToColors[block] || ""}
-                        onChange={(e) =>
-                            handleBlockSetup(
-                                block,
-                                e.target.value,
-                                "blockToColors"
-                            )
-                        }
-                        style={colorStyle(formData.blockToColors[block])}
-                    >
-                        <option value="" hidden>
-                            Select Color
-                        </option>
-                        {colorOptions.map((option) => (
-                            <option
-                                key={option.id}
-                                value={option.id}
-                                className="dropdown-option"
-                                style={{
-                                    backgroundColor: option.hex,
-                                    color: "white",
-                                }}
-                            >
-                                {option.name}
-                            </option>
-                        ))}
-                    </select>
-                </div>
-            ))}
-
-            <div className="block-section">
-                <h4>Humanities</h4>
+<div className="block-section">
+                <h4>Humanities Block</h4>
                 <input
                     type="text"
                     maxLength={1}
@@ -261,6 +225,44 @@ const SetupForm = () => {
                     ))}
                 </select>
             </div>
+
+            {otherBlocks.map((block) => (
+                <div className="block-section" key={block}>
+                    <h4>{block}</h4>
+
+                    <select
+                        name={`blockToColors[${block}]`}
+                        value={formData.blockToColors[block] || ""}
+                        onChange={(e) =>
+                            handleBlockSetup(
+                                block,
+                                e.target.value,
+                                "blockToColors"
+                            )
+                        }
+                        style={colorStyle(formData.blockToColors[block])}
+                    >
+                        <option value="" hidden>
+                            Select Color
+                        </option>
+                        {colorOptions.map((option) => (
+                            <option
+                                key={option.id}
+                                value={option.id}
+                                className="dropdown-option"
+                                style={{
+                                    backgroundColor: option.hex,
+                                    color: "white",
+                                }}
+                            >
+                                {option.name}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+            ))}
+
+           
 
             <div className="block-section">
                 <h4>Default</h4>
