@@ -5,12 +5,14 @@ const API_BASE_URL = 'https://millville-calendar-a4e239009a4b.herokuapp.com'; //
 
 // Create an instance of axios with the base URL
 const api = axios.create({
-    baseURL: API_BASE_URL
+    baseURL: API_BASE_URL,
+    timeout: 500000, // 10 seconds timeout
 });
 
 // Function to process events
 export const processEvents = async (formData) => {
     try {
+        // get rid of request timeout
         const response = await api.post('/processEvents', formData);
         return response.data; // Returns the data from the server response
     } catch (error) {

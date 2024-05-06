@@ -38,6 +38,9 @@ select {
 .button-container {
     text-align: center;
 }
+.result {
+    text-align: center;
+}
 
 button {
     padding: 8px 16px;
@@ -46,4 +49,8 @@ button {
     border: none;
     border-radius: 4px;
     cursor: pointer;
+}
+button:disabled {
+    background-color: #ccc; /* Grey out button when disabled */
+    cursor: not-allowed; /* Show not-allowed cursor on hover */
 }
