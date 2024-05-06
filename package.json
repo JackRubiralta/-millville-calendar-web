@@ -1,6 +1,8 @@
 {
   "name": "millville-calendar-web",
-  "version": "0.1.0",
+  "version": "1.1.0",
+  "homepage": "https://jackrubiralta.github.io/millville-calendar-web/",
+
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^5.17.0",
