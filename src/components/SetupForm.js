@@ -29,6 +29,7 @@ const SetupForm = () => {
         lunchColorId: "",
         defaultColorId: "",
     });
+    
     const [links, setLinks] = useState({
         iCalLink: "",
         googleCalendarLink: "",
@@ -99,15 +100,11 @@ const SetupForm = () => {
         setResult("Processing...");
         try {
             const response = await processEvents(formData);
-            setResult(`Success: Events processed and calendar created.`);
+            setResult(`Success!`);
             setLinks({ iCalLink: response.iCalLink, googleCalendarLink: response.googleCalendarLink });
         } catch (error) {
             // Custom error handling based on error response
-            if (false) { // 503 Service Unavailable
-                setResult("Server is busy, someone is uploading a schedule. Please try again later.");
-            } else {
-                setResult(`Error: ${error.message}`);
-            }
+            setResult(`Error: ${error.message}`);
             setLinks({ iCalLink: '', googleCalendarLink: '' });
         }
         setLoading(false);
@@ -307,7 +304,7 @@ const SetupForm = () => {
 
             {(result && !loading) && (
                 <div className="result">
-                    <div>{"Success!"}</div>
+                    <div>{result}</div>
                     {links.iCalLink && (
                         <div>
                             <a
