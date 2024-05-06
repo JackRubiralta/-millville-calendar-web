@@ -305,7 +305,7 @@ const SetupForm = () => {
 
             {(result && !loading) && (
                 <div className="result">
-                    <div>{"Success! Please wait 5 minutes for server to create your schedule"}</div>
+                    <div>{"Success!"}</div>
                     {links.iCalLink && (
                         <div>
                             iCal Link:{" "}
