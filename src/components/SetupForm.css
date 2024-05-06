@@ -1,43 +1,49 @@
-.setup-form-container {
+.setup-form {
     max-width: 600px;
-    margin: 40px auto;
+    margin: 20px auto;
     padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    background: #f9f9f9;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+    
+.form-group, .block-section {
+    margin-bottom: 15px;
 }
 
-.form-group {
-    margin-bottom: 20px;
-}
-
-.form-group label {
-    font-weight: bold;
-    display: block;
+h4 {
     margin-bottom: 8px;
 }
 
 input, select {
     width: 100%;
     padding: 8px;
+    margin-bottom: 10px;
     border: 1px solid #ccc;
-    border-radius: 5px;
+    border-radius: 4px;
+}
+
+.dropdown-option {
+    
+    padding: 16px;
+    margin: 15px;
+    height: 90px;
+}
+select {
+    appearance: none; /* Remove default styling of select element */
+    background-color: transparent;
+    color: black; /* Ensure text is white by default */
 }
 
 .button-container {
-    text-align: right;
+    text-align: center;
 }
 
 button {
-    padding: 10px 20px;
-    background-color: #007BFF;
-    border: none;
-    border-radius: 5px;
+    padding: 8px 16px;
+    background-color: #007bff;
     color: white;
+    border: none;
+    border-radius: 4px;
     cursor: pointer;
-    font-size: 16px;
-}
-
-button:hover {
-    background-color: #0056b3;
 }

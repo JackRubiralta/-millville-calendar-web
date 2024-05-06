@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import './SetupForm.css'; // Ensure this CSS file is present
+import './SetupForm.css'; // Make sure this CSS file is correctly linked
+import { processEvents } from '../api'; // Importing the processEvents function
 
 const colorOptions = [
     { id: '1', name: "Lavender", hex: "#7986cb" },
@@ -15,6 +16,9 @@ const colorOptions = [
     { id: '11', name: "Tomato", hex: "#d60000" },
 ];
 
+const blocks = ["A", "B", "C", "D", "E", "F"];
+const otherBlocks = ["Chapel", "FLEX", "House Meetings"];
+
 const SetupForm = () => {
     const [formData, setFormData] = useState({
         shareEmail: '',
@@ -23,54 +27,48 @@ const SetupForm = () => {
         humanitiesBlock: '',
         secondLunchBlocks: '',
         lunchColorId: '',
-        otherBlockColors: {
-            Chapel: '',
-            FLEX: '',
-            'House Meetings': ''
-        },
         defaultColorId: ''
     });
 
-    // Handles text input and selects for non-block data
+    const [result, setResult] = useState(''); // State to store API response message
+
+
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData(prev => ({ ...prev, [name]: value }));
     };
 
-    // Handles block color selection for both blockToColors and otherBlockColors
-    const handleBlockColorChange = (block, value, isOtherBlock = false) => {
-        if (isOtherBlock) {
-            setFormData(prev => ({
-                ...prev,
-                otherBlockColors: {
-                    ...prev.otherBlockColors,
-                    [block]: value
-                }
-            }));
-        } else {
-            setFormData(prev => ({
-                ...prev,
-                blockToColors: {
-                    ...prev.blockToColors,
-                    [block]: value
-                }
-            }));
+    const handleBlockSetup = (key, value, type) => {
+        setFormData(prev => ({
+            ...prev,
+            [type]: {
+                ...prev[type],
+                [key]: value
+            }
+        }));
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            const response = await processEvents(formData);
+            setResult(`Success: ${JSON.stringify(response)}`); // Displaying successful API response
+        } catch (error) {
+            setResult(`Error: ${error.message}`); // Displaying error message from API
         }
     };
 
-    // Handles form submission
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        console.log('Submitted Data:', formData);
-        // Implement your API call here
+
+    const colorStyle = (colorId) => {
+        const color = colorOptions.find(c => c.id === colorId);
+        return { backgroundColor: color ? color.hex : 'transparent' };
     };
 
     return (
         <form onSubmit={handleSubmit} className="setup-form">
             <div className="form-group">
-                <label>Email to Share Calendar:</label>
+            <h4>{"Email"}</h4>
                 <input
-                    type="email"
                     name="shareEmail"
                     value={formData.shareEmail}
                     onChange={handleChange}
@@ -78,18 +76,25 @@ const SetupForm = () => {
                 />
             </div>
 
-            {/* Loop through primary block names for color selection */}
-            {['A', 'B', 'C', 'D', 'E', 'F'].map(block => (
-                <div className="form-group" key={block}>
-                    <label>{`Color for Block ${block}:`}</label>
+            {blocks.concat(otherBlocks).map(block => (
+                <div className="block-section" key={block}>
+                    <h4>{block + " Block"}</h4>
+                    <input
+                        type="text"
+                        name={`blockToClasses[${block}]`}
+                        value={formData.blockToClasses[block] || ''}
+                        onChange={(e) => handleBlockSetup(block, e.target.value, 'blockToClasses')}
+                        placeholder={`Class name for ${block}`}
+                    />
                     <select
                         name={`blockToColors[${block}]`}
                         value={formData.blockToColors[block] || ''}
-                        onChange={(e) => handleBlockColorChange(block, e.target.value)}
+                        onChange={(e) => handleBlockSetup(block, e.target.value, 'blockToColors')}
+                        style={colorStyle(formData.blockToColors[block])}
                     >
-                        <option value="">Select Color</option>
+                        <option value="" hidden>Select Color</option>
                         {colorOptions.map(option => (
-                            <option key={option.id} value={option.id}>
+                            <option key={option.id} value={option.id} className='dropdown-option' style={{ backgroundColor: option.hex, color: 'black'}}>
                                 {option.name}
                             </option>
                         ))}
@@ -97,59 +102,54 @@ const SetupForm = () => {
                 </div>
             ))}
 
-            <div className="form-group">
-                <label>Color ID for Lunch:</label>
+            <div className="block-section">
+                <h4>Lunch</h4>
+                <input
+                    type="text"
+                    name="secondLunchBlocks"
+                    value={formData.secondLunchBlocks}
+                    onChange={handleChange}
+                    placeholder="Blocks with class during first lunch (e.g., A,B,C)"
+                />
                 <select
                     name="lunchColorId"
-                    value={formData.lunchColorId}
+                    value={formData.lunchColorId || ''}
                     onChange={handleChange}
+                    style={colorStyle(formData.lunchColorId)}
                 >
                     <option value="">Select Color</option>
                     {colorOptions.map(option => (
-                        <option key={option.id} value={option.id}>
+                        <option key={option.id} value={option.id} className='dropdown-option'style={{ backgroundColor: option.hex, color: '#fff' }}>
                             {option.name}
                         </option>
                     ))}
                 </select>
             </div>
 
-            {/* Loop through additional blocks like Chapel, FLEX, House Meetings */}
-            {['Chapel', 'FLEX', 'House Meetings'].map(block => (
-                <div className="form-group" key={block}>
-                    <label>{`Color for ${block}:`}</label>
-                    <select
-                        name={`otherBlockColors[${block}]`}
-                        value={formData.otherBlockColors[block] || ''}
-                        onChange={(e) => handleBlockColorChange(block, e.target.value, true)}
-                    >
-                        <option value="">Select Color</option>
-                        {colorOptions.map(option => (
-                            <option key={option.id} value={option.id}>
-                                {option.name}
-                            </option>
-                        ))}
-                    </select>
-                </div>
-            ))}
-
-            <div className="form-group">
-                <label>Default Color for Events:</label>
+            <div className="block-section">
+                <h4>Default</h4>
                 <select
                     name="defaultColorId"
-                    value={formData.defaultColorId}
+                    value={formData.defaultColorId || ''}
                     onChange={handleChange}
+                    style={colorStyle(formData.defaultColorId)}
                 >
                     <option value="">Select Color</option>
                     {colorOptions.map(option => (
-                        <option key={option.id} value={option.id}>
+                        <option key={option.id} value={option.id} className='dropdown-option' style={{ backgroundColor: option.hex, color: '#fff' }}>
                             {option.name}
                         </option>
                     ))}
                 </select>
             </div>
+
 
             <div className="button-container">
                 <button type="submit">Finish Setup</button>
+            </div>
+            
+            <div className="result">
+                {result} 
             </div>
         </form>
     );
