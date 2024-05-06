@@ -314,7 +314,7 @@ const SetupForm = () => {
                                 target="_blank"
                                 rel="noopener noreferrer"
                             >
-                                {links.iCalLink}
+                                {"iCal download link"}
                             </a>
                         </div>
                     )}
@@ -326,7 +326,7 @@ const SetupForm = () => {
                                 target="_blank"
                                 rel="noopener noreferrer"
                             >
-                                {links.googleCalendarLink}
+                                {"Google calendar link"}
                             </a>
                         </div>
                     )}
