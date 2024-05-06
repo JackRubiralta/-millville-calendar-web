@@ -103,7 +103,7 @@ const SetupForm = () => {
             setLinks({ iCalLink: response.iCalLink, googleCalendarLink: response.googleCalendarLink });
         } catch (error) {
             // Custom error handling based on error response
-            if (error.response && error.response.status === 503) { // 503 Service Unavailable
+            if (false) { // 503 Service Unavailable
                 setResult("Server is busy, someone is uploading a schedule. Please try again later.");
             } else {
                 setResult(`Error: ${error.message}`);
