@@ -308,7 +308,6 @@ const SetupForm = () => {
                     <div>{"Success!"}</div>
                     {links.iCalLink && (
                         <div>
-                            iCal Link:{" "}
                             <a
                                 href={links.iCalLink}
                                 target="_blank"
@@ -320,7 +319,7 @@ const SetupForm = () => {
                     )}
                     {links.googleCalendarLink && (
                         <div>
-                            Google Calendar:{" "}
+                            
                             <a
                                 href={links.googleCalendarLink}
                                 target="_blank"
