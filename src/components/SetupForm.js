@@ -303,7 +303,7 @@ const SetupForm = () => {
                 </div>
             )}
 
-            {result && !loading (
+            {(result && !loading) && (
                 <div className="result">
                     <div>{result}</div>
                     {links.iCalLink && (
