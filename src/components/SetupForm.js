@@ -81,7 +81,7 @@ const SetupForm = () => {
                 />
             </div>
 
-            {blocks.concat(otherBlocks).map(block => (
+            {blocks.map(block => (
                 <div className="block-section" key={block}>
                     <h4>{block + " Block"}</h4>
                     <input
@@ -91,6 +91,26 @@ const SetupForm = () => {
                         onChange={(e) => handleBlockSetup(block, e.target.value, 'blockToClasses')}
                         placeholder={`Class name for ${block}`}
                     />
+                    <select
+                        name={`blockToColors[${block}]`}
+                        value={formData.blockToColors[block] || ''}
+                        onChange={(e) => handleBlockSetup(block, e.target.value, 'blockToColors')}
+                        style={colorStyle(formData.blockToColors[block])}
+                    >
+                        <option value="" hidden>Select Color</option>
+                        {colorOptions.map(option => (
+                            <option key={option.id} value={option.id} className='dropdown-option' style={{ backgroundColor: option.hex, color: 'black'}}>
+                                {option.name}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+            ))}
+
+{otherBlocks.map(block => (
+                <div className="block-section" key={block}>
+                    <h4>{block }</h4>
+                   
                     <select
                         name={`blockToColors[${block}]`}
                         value={formData.blockToColors[block] || ''}
