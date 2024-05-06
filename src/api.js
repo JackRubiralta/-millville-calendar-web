@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // Set up a base URL for API requests
-const API_BASE_URL = 'http://localhost:3000'; // Adjust this to the actual URL of your server
+const API_BASE_URL = 'https://millville-calendar-a4e239009a4b.herokuapp.com'; // Adjust this to the actual URL of your server
 
 // Create an instance of axios with the base URL
 const api = axios.create({

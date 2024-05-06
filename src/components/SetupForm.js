@@ -29,6 +29,8 @@ const SetupForm = () => {
         lunchColorId: '',
         defaultColorId: ''
     });
+    const [links, setLinks] = useState({ iCalLink: '', googleCalendarLink: '' });
+
 
     const [result, setResult] = useState(''); // State to store API response message
 
@@ -50,11 +52,14 @@ const SetupForm = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setResult("Processing...");
         try {
             const response = await processEvents(formData);
-            setResult(`Success: ${JSON.stringify(response)}`); // Displaying successful API response
+            setResult(`Success: Events processed and calendar created.`);
+            setLinks({ iCalLink: response.iCalLink, googleCalendarLink: response.googleCalendarLink });
         } catch (error) {
-            setResult(`Error: ${error.message}`); // Displaying error message from API
+            setResult(`Error: ${error.message}`);
+            setLinks({ iCalLink: '', googleCalendarLink: '' });
         }
     };
 
@@ -149,7 +154,9 @@ const SetupForm = () => {
             </div>
             
             <div className="result">
-                {result} 
+                {result && <div>{result}</div>}
+                {links.iCalLink && <div>iCal Link: <a href={links.iCalLink} target="_blank" rel="noopener noreferrer">{links.iCalLink}</a></div>}
+                {links.googleCalendarLink && <div>Google Calendar: <a href={links.googleCalendarLink} target="_blank" rel="noopener noreferrer">{links.googleCalendarLink}</a></div>}
             </div>
         </form>
     );
