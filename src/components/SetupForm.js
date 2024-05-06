@@ -38,6 +38,7 @@ const SetupForm = () => {
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData(prev => ({ ...prev, [name]: value }));
+        console.log(formData);
     };
 
     const handleBlockSetup = (key, value, type) => {
@@ -142,7 +143,7 @@ const SetupForm = () => {
                     onChange={handleChange}
                     style={colorStyle(formData.lunchColorId)}
                 >
-                    <option value="">Select Color</option>
+                    <option value="" hidden>Select Color</option>
                     {colorOptions.map(option => (
                         <option key={option.id} value={option.id} className='dropdown-option'style={{ backgroundColor: option.hex, color: '#fff' }}>
                             {option.name}
@@ -159,7 +160,7 @@ const SetupForm = () => {
                     onChange={handleChange}
                     style={colorStyle(formData.defaultColorId)}
                 >
-                    <option value="">Select Color</option>
+                    <option value="" hidden>Select Color</option>
                     {colorOptions.map(option => (
                         <option key={option.id} value={option.id} className='dropdown-option' style={{ backgroundColor: option.hex, color: '#fff' }}>
                             {option.name}
