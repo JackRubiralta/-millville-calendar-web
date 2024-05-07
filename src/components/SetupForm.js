@@ -21,13 +21,13 @@ const otherBlocks = ["Chapel", "FLEX", "House Meetings"];
 
 const SetupForm = () => {
     const [formData, setFormData] = useState({
-        shareEmail: "",
-        blockToClasses: {},
-        blockToColors: {},
-        humanitiesBlock: "",
-        secondLunchBlocks: "",
-        lunchColorId: "",
-        defaultColorId: "",
+        "shareEmail": "",
+        "blockToClasses": {},
+        "blockToColors": {},
+        "humanitiesBlock": "",
+        "secondLunchBlocks": "",
+        "lunchColor": "",
+        "defaultColor": "",
     });
 
     const [links, setLinks] = useState({
@@ -130,8 +130,8 @@ const SetupForm = () => {
             allOtherBlocksHaveColors &&
             secondLunchBlocksValid &&
             humanitiesBlockValid &&
-            formData.lunchColorId.trim() !== "" &&
-            formData.defaultColorId.trim() !== ""
+            formData.lunchColor.trim() !== "" &&
+            formData.defaultColor.trim() !== ""
         );
     };
 
@@ -228,7 +228,7 @@ const SetupForm = () => {
                 />
             </div>
             <div className="block-section">
-                <h4>First Lunch Blocks</h4>
+                <h4> Lunch Blocks</h4>
                 <input
                     type="text"
                     name="secondLunchBlocks"
@@ -237,10 +237,10 @@ const SetupForm = () => {
                     placeholder="Blocks with class during first lunch (e.g., A,B,C)"
                 />
                 <select
-                    name="lunchColorId"
-                    value={formData.lunchColorId || ""}
+                    name="lunchColor"
+                    value={formData.lunchColor || ""}
                     onChange={handleChange}
-                    style={colorStyle(formData.lunchColorId)}
+                    style={colorStyle(formData.lunchColor)}
                 >
                     <option value="" hidden>
                         Select Color
@@ -300,10 +300,10 @@ const SetupForm = () => {
             <div className="block-section">
                 <h4>Default</h4>
                 <select
-                    name="defaultColorId"
-                    value={formData.defaultColorId || ""}
+                    name="defaultColor"
+                    value={formData.defaultColor || ""}
                     onChange={handleChange}
-                    style={colorStyle(formData.defaultColorId)}
+                    style={colorStyle(formData.defaultColor)}
                 >
                     <option value="" hidden>
                         Select Color
