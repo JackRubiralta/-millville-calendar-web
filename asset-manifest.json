@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/millville-calendar-web/static/css/main.ce21e3b8.css",
-    "main.js": "/millville-calendar-web/static/js/main.f5c045ab.js",
+    "main.js": "/millville-calendar-web/static/js/main.7432bf82.js",
     "static/js/453.08f9d226.chunk.js": "/millville-calendar-web/static/js/453.08f9d226.chunk.js",
     "index.html": "/millville-calendar-web/index.html",
     "main.ce21e3b8.css.map": "/millville-calendar-web/static/css/main.ce21e3b8.css.map",
-    "main.f5c045ab.js.map": "/millville-calendar-web/static/js/main.f5c045ab.js.map",
+    "main.7432bf82.js.map": "/millville-calendar-web/static/js/main.7432bf82.js.map",
     "453.08f9d226.chunk.js.map": "/millville-calendar-web/static/js/453.08f9d226.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.ce21e3b8.css",
-    "static/js/main.f5c045ab.js"
+    "static/js/main.7432bf82.js"
   ]
 }
