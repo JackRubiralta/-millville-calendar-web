@@ -140,6 +140,7 @@ const SetupForm = () => {
         setLoading(true);
         setResult("Processing...");
         try {
+            formData.secondLunchBlocks = formData.secondLunchBlocks.replace(",", "")
             const response = await processEvents(formData);
             setRequestId(response.requestId); // Assuming the server returns a requestId
         } catch (error) {
