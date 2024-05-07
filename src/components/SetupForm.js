@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./SetupForm.css";
-import { processEvents } from "../api";
+import { processEvents, checkStatus } from "../api";
 
 const colorOptions = [
     { id: "1", name: "Lavender", hex: "#7986cb" },
@@ -29,29 +29,59 @@ const SetupForm = () => {
         lunchColorId: "",
         defaultColorId: "",
     });
-    
+
     const [links, setLinks] = useState({
         iCalLink: "",
         googleCalendarLink: "",
     });
     const [loading, setLoading] = useState(false);
     const [result, setResult] = useState("");
+    const [requestId, setRequestId] = useState(null);
 
-   const handleChange = (e) => {
-    const { name, value } = e.target;
-    let formattedValue = value;
-    if (name === "shareEmail") {
-        // Only trim spaces for the email, do not change case
-        formattedValue = value.trim();
-    } else if (name === "secondLunchBlocks" || name === "humanitiesBlock") {
-        // Remove spaces and convert to uppercase for block identifiers
-        formattedValue = value.replace(/\s+/g, "").toUpperCase();
-    } else if (name.startsWith("blockToClasses")) {
-        // Trim class names
-        formattedValue = value.trim();
-    }
-    setFormData(prev => ({ ...prev, [name]: formattedValue }));
-};
+    useEffect(() => {
+        const interval = setInterval(() => {
+            if (requestId) {
+                checkStatus(requestId)
+                    .then((data) => {
+                        if (data.status === "completed") {
+                            setLinks({
+                                iCalLink: data.iCalLink,
+                                googleCalendarLink: data.googleCalendarLink,
+                            });
+                            setResult("Setup complete!");
+                            setLoading(false);
+                            clearInterval(interval);
+                        } else if (data.status === "failed") {
+                            setResult("Error: " + data.message);
+                            setLoading(false);
+                            clearInterval(interval);
+                        }
+                    })
+                    .catch((error) => {
+                        setResult("Error checking status: " + error.message);
+                        setLoading(false);
+                    });
+            }
+        }, 5000); // Poll every 5 seconds
+
+        return () => clearInterval(interval);
+    }, [requestId]);
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        let formattedValue = value;
+        if (name === "shareEmail") {
+            // Only trim spaces for the email, do not change case
+            formattedValue = value.trim();
+        } else if (name === "secondLunchBlocks" || name === "humanitiesBlock") {
+            // Remove spaces and convert to uppercase for block identifiers
+            formattedValue = value.replace(/\s+/g, "").toUpperCase();
+        } else if (name.startsWith("blockToClasses")) {
+            // Trim class names
+            formattedValue = value.trim();
+        }
+        setFormData((prev) => ({ ...prev, [name]: formattedValue }));
+    };
 
     const handleBlockSetup = (key, value, type) => {
         const formattedValue = value;
@@ -67,32 +97,43 @@ const SetupForm = () => {
     const validateForm = () => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         const validBlockRegex = /^[A-F]$/; // Regex to check if a single block is valid
-    
+
         // Check if each block has a non-empty class name and color
-        const allBlocksHaveData = blocks.every(block => formData.blockToClasses[block] && formData.blockToColors[block]);
-    
+        const allBlocksHaveData = blocks.every(
+            (block) =>
+                formData.blockToClasses[block] && formData.blockToColors[block]
+        );
+
         // Check if each other block has a non-empty color
-        const allOtherBlocksHaveColors = otherBlocks.every(block => formData.blockToColors[block]);
-    
+        const allOtherBlocksHaveColors = otherBlocks.every(
+            (block) => formData.blockToColors[block]
+        );
+
         // Validate Second Lunch Blocks to ensure only valid block letters separated by commas
-        const secondLunchBlocksValid = formData.secondLunchBlocks.split(',')
-                                     .map(block => block.trim().toUpperCase()) // Normalize input
-                                     .every(block => blocks.includes(block) && block.match(validBlockRegex));
-    
+        const secondLunchBlocksValid = formData.secondLunchBlocks
+            .split(",")
+            .map((block) => block.trim().toUpperCase()) // Normalize input
+            .every(
+                (block) =>
+                    blocks.includes(block) && block.match(validBlockRegex)
+            );
+
         // Validate Humanities Block to ensure it is either a valid block or empty
-        const humanitiesBlockValid = formData.humanitiesBlock === '' || (blocks.includes(formData.humanitiesBlock) && formData.humanitiesBlock.match(validBlockRegex));
-    
+        const humanitiesBlockValid =
+            formData.humanitiesBlock === "" ||
+            (blocks.includes(formData.humanitiesBlock) &&
+                formData.humanitiesBlock.match(validBlockRegex));
+
         return (
-            emailRegex.test(formData.shareEmail.trim()) &&  // Validate the email address
+            emailRegex.test(formData.shareEmail.trim()) && // Validate the email address
             allBlocksHaveData &&
             allOtherBlocksHaveColors &&
             secondLunchBlocksValid &&
             humanitiesBlockValid &&
-            formData.lunchColorId.trim() !== '' &&
-            formData.defaultColorId.trim() !== ''
+            formData.lunchColorId.trim() !== "" &&
+            formData.defaultColorId.trim() !== ""
         );
     };
-    
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -100,16 +141,13 @@ const SetupForm = () => {
         setResult("Processing...");
         try {
             const response = await processEvents(formData);
-            setResult(`Success!`);
-            setLinks({ iCalLink: response.iCalLink, googleCalendarLink: response.googleCalendarLink });
+            setRequestId(response.requestId); // Assuming the server returns a requestId
         } catch (error) {
-            // Custom error handling based on error response
             setResult(`Error: ${error.message}`);
-            setLinks({ iCalLink: '', googleCalendarLink: '' });
+            setLoading(false);
         }
-        setLoading(false);
     };
-    
+
     const colorStyle = (colorId) => {
         const color = colorOptions.find((c) => c.id === colorId);
         return {
@@ -178,7 +216,7 @@ const SetupForm = () => {
                 </div>
             ))}
 
-<div className="block-section">
+            <div className="block-section">
                 <h4>Humanities Block</h4>
                 <input
                     type="text"
@@ -259,8 +297,6 @@ const SetupForm = () => {
                 </div>
             ))}
 
-           
-
             <div className="block-section">
                 <h4>Default</h4>
                 <select
@@ -331,7 +367,7 @@ const SetupForm = () => {
                 </div>
             )}
         </form>
-    ); // for the result have it replace the setup botton
+    );
 };
 
 export default SetupForm;

@@ -6,21 +6,27 @@ const API_BASE_URL = 'https://millville-calendar-a4e239009a4b.herokuapp.com'; //
 // Create an instance of axios with the base URL
 const api = axios.create({
     baseURL: API_BASE_URL,
-    timeout: 500000, // 10 seconds timeout
+    timeout: 500000, // Extend the timeout to handle long-running requests
 });
 
 // Function to process events
 export const processEvents = async (formData) => {
     try {
-        // get rid of request timeout
         const response = await api.post('/processEvents', formData);
-        return response.data; // Returns the data from the server response
+        return response.data; // Returns the data from the server response including requestId
     } catch (error) {
-        // Handle errors (e.g., network error, server response error)
         console.error('Error during API call:', error);
         throw error; // Rethrow or handle as needed
     }
 };
 
-// You can add more API functions here if needed
-
+// Function to check the status of the processing using a requestId
+export const checkStatus = async (requestId) => {
+    try {
+        const response = await api.get(`/status/${requestId}`);
+        return response.data; // Expected to return the status of the process
+    } catch (error) {
+        console.error('Error checking status:', error);
+        throw error; // Rethrow or handle as needed
+    }
+};
