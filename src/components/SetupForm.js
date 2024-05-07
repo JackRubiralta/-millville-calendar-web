@@ -206,7 +206,7 @@ const SetupForm = () => {
                                 className="dropdown-option"
                                 style={{
                                     backgroundColor: option.hex,
-                                    color: "white",
+                                    color: "black",
                                 }}
                             >
                                 {option.name}
@@ -252,7 +252,7 @@ const SetupForm = () => {
                             className="dropdown-option"
                             style={{
                                 backgroundColor: option.hex,
-                                color: "white",
+                                color: "black",
                             }}
                         >
                             {option.name}
@@ -287,7 +287,7 @@ const SetupForm = () => {
                                 className="dropdown-option"
                                 style={{
                                     backgroundColor: option.hex,
-                                    color: "white",
+                                    color: "black",
                                 }}
                             >
                                 {option.name}
